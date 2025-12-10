@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import "dayjs/locale/id";
-dayjs.locale("id");
+dayjs.locale("en");
 
 export function getCurrentDate(): Date {
   return new Date();

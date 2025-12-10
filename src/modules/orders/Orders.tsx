@@ -1,7 +1,14 @@
-import React from 'react'
+"use client";
+
+import OrdersList from "./components/OrderList";
+
 
 export default function Orders() {
   return (
-    <div>Orders</div>
-  )
+    <>
+      <div className="p-6">
+        <OrdersList />
+      </div>
+    </>
+  );
 }

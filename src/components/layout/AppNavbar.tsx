@@ -1,15 +1,15 @@
 "use client";
 
 import { useSidebar } from "@/components/ui/sidebar";
-import { Bell, Menu, Receipt, ShoppingCart } from "lucide-react";
+import { USER_ROLES } from "@/constants/constants";
+import { Bell, Menu, ReceiptText, ShoppingCart } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ZIconButton } from "../buttons";
+import { ZSearchInput } from "../inputs";
 import { UserMenu } from "../templates";
 import { Show } from "../utils";
-import { USER_ROLES } from "@/constants/constants";
-import { ZSearchInput } from "../inputs";
 
 export default function AppNavbar() {
   const { data: session, status } = useSession();
@@ -95,9 +95,9 @@ export default function AppNavbar() {
               <ZIconButton
                 variant="ghost"
                 icon={
-                  <Receipt className="w-5 h-5 text-red-400 hover:text-red-200 transition" />
+                  <ReceiptText className="w-5 h-5 text-red-400 hover:text-red-200 transition" />
                 }
-                tooltip="Cart"
+                tooltip="Orders"
               />
             </Link>
           </Show.When>
