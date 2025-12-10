@@ -1,0 +1,1 @@
+export { useScreenResolutionListener } from "./useScreenResolution";

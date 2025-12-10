@@ -1,0 +1,1 @@
+export { useScreenResolutionStore } from "./screenResolutionStore";
