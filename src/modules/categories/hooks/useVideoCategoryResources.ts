@@ -21,5 +21,6 @@ export function useVideoCategoryResources({
       return data;
     },
     enabled,
+    refetchOnWindowFocus: false,
   });
 }

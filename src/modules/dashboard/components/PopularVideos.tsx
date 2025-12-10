@@ -1,5 +1,5 @@
 "use client";
-import { Show, ZImage, ZSkeleton } from "@/components";
+import { Show, ZImage, ZNoVideoFound, ZSkeleton } from "@/components";
 import Link from "next/link";
 import { usePopularVideos } from "../hooks/usePopularVideos";
 
@@ -9,14 +9,14 @@ export default function PopularVideos() {
 
   return (
     <>
-     <Show.When condition={query.isPending}>
+      <Show.When condition={query.isPending}>
         <div className="flex gap-4 overflow-x-auto py-2 flex-nowrap">
           <ZSkeleton variant="card" orientation="horizontal" rows={6} />
         </div>
       </Show.When>
 
       <Show.When condition={!query.isPending && videos.length === 0}>
-        <p className="text-zinc-400 text-sm text-center">No videos found.</p>
+        <ZNoVideoFound />
       </Show.When>
 
       <Show.When condition={!query.isPending && videos.length > 0}>

@@ -21,5 +21,6 @@ export function usePopularVideos({
       return data;
     },
     enabled,
+    refetchOnWindowFocus: false,
   });
 }

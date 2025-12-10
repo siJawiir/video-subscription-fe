@@ -16,6 +16,8 @@ interface ZIconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: Components.ButtonVariant;
   size?: Components.ButtonSize;
   tooltip?: string;
+
+  isPending?: boolean;
 }
 
 export default function ZIconButton({
@@ -25,6 +27,8 @@ export default function ZIconButton({
   tooltip,
   className,
   children,
+  isPending = false,
+  disabled,
   ...props
 }: ZIconButtonProps) {
   const sizeClasses: Record<Components.ButtonSize, string> = {
@@ -38,6 +42,8 @@ export default function ZIconButton({
       {...props}
       variant={variant}
       size={size}
+      disabled={disabled || isPending}
+      isPending={isPending}
       className={cn(
         "p-0 rounded-full flex items-center justify-center",
         sizeClasses[size],
@@ -49,7 +55,6 @@ export default function ZIconButton({
     </ZButton>
   );
 
-  // Jika tidak ada tooltip → langsung return button
   if (!tooltip) return button;
 
   return (

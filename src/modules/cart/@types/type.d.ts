@@ -1,9 +1,14 @@
 declare module "cart-types" {
+  import { VideoResponseType } from "video-type";
   import { AuditType } from "@/@types/api";
   export interface CartFormType {
     cart_item_id?: number;
     video_id: number;
     duration_seconds: number;
+  }
+
+  export interface CheckOutFormType {
+    cart_item_ids: number[];
   }
 
   export interface CartResponseType extends AuditType {
@@ -17,5 +22,6 @@ declare module "cart-types" {
     video_id: number;
     duration_seconds: number;
     price: number;
+    video?: VideoResponseType;
   }
 }

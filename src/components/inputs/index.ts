@@ -4,3 +4,4 @@ export { ZOptionInput } from "./ZOptionInput";
 export { ZImageInput } from "./ZImageInput";
 export { ZSwitchInput } from "./ZSwitchInput";
 export { ZSearchInput } from "./ZSearchInput";
+export { ZDurationInput } from "./ZDurationInput";

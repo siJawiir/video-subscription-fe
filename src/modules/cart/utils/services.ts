@@ -1,6 +1,16 @@
-import { apiPostService, apiPutService } from "@/lib/axios";
-import { CartFormType, CartItemResponseType } from "cart-types";
-
+import { apiGetService, apiPostService, apiPutService } from "@/lib/axios";
+import {
+  CartFormType,
+  CartItemResponseType,
+  CartResponseType,
+  CheckOutFormType,
+} from "cart-types";
+export async function getCart() {
+  return await apiGetService<CartResponseType>({
+    url: "/cart",
+    params: {},
+  });
+}
 export async function addToCart(payload: CartFormType) {
   return await apiPostService<CartItemResponseType, CartFormType>({
     url: "/cart/add",
@@ -15,15 +25,15 @@ export async function updateCart(payload: CartFormType) {
   });
 }
 
-export async function removeCart(payload: CartFormType) {
-  return await apiPostService<CartItemResponseType, CartFormType>({
+export async function removeCart(payload: { cart_item_id: number }) {
+  return await apiPostService<CartItemResponseType, { cart_item_id: number }>({
     url: `/cart/remove`,
     payload,
   });
 }
 
-export async function checkoutCart(payload: CartFormType) {
-  return await apiPostService<CartItemResponseType, CartFormType>({
+export async function checkoutCart(payload: CheckOutFormType) {
+  return await apiPostService<CartItemResponseType, CheckOutFormType>({
     url: `/cart/checkout`,
     payload,
   });

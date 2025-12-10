@@ -1,5 +1,5 @@
 "use client";
-import { Show, ZImage, ZSkeleton } from "@/components";
+import { Show, ZImage, ZNoVideoFound, ZSkeleton } from "@/components";
 import Link from "next/link";
 import { useLatestVideos } from "../hooks/useLatestVideos";
 
@@ -16,7 +16,7 @@ export default function LatestVideos() {
       </Show.When>
 
       <Show.When condition={!query.isPending && videos.length === 0}>
-        <p className="text-zinc-400 text-sm text-center">No videos found.</p>
+        <ZNoVideoFound />
       </Show.When>
 
       <Show.When condition={!query.isPending && videos.length > 0}>

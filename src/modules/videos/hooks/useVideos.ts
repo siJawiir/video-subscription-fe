@@ -23,5 +23,6 @@ export function useVideos({
       return data;
     },
     enabled,
+    refetchOnWindowFocus: false,
   });
 }

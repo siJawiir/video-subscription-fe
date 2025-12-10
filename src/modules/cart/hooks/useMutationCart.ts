@@ -5,7 +5,7 @@ import {
 } from "@/lib/handlers/mutation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CartFormType } from "cart-types";
-import { addToCart, updateCart } from "../utils/services";
+import { addToCart, removeCart, updateCart } from "../utils/services";
 
 export const useMutationCart = ({ videoID }: { videoID: number }) => {
   const queryClient = useQueryClient();
@@ -30,5 +30,29 @@ export const useMutationCart = ({ videoID }: { videoID: number }) => {
     mutation.mutate(formData);
   };
 
-  return { ...mutation, onSubmit };
+  const mDelete = useMutation<
+    MutationResponse,
+    Error,
+    { cart_item_id: number }
+  >({
+    mutationFn: (data: { cart_item_id: number }) => {
+      const payload = { ...data };
+      return removeCart(payload);
+    },
+    onSuccess: (response, variables) => {
+      handleMutationSuccess(response, variables, {
+        queryClient,
+        invalidateQueryKey: ["cart-list"],
+        isUpdate: !!variables.cart_item_id,
+        resetForm: () => {},
+      });
+    },
+    onError: (error) => handleMutationError(error),
+  });
+
+  const onDelete = (formData: { cart_item_id: number }) => {
+    mDelete.mutate(formData);
+  };
+
+  return { ...mutation, onSubmit, onDelete, mDelete };
 };

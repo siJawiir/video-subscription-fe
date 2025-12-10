@@ -21,5 +21,6 @@ export function useLatestVideos({
       return data;
     },
     enabled,
+    refetchOnWindowFocus: false,
   });
 }

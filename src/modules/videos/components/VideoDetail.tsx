@@ -1,6 +1,6 @@
 "use client";
 
-import { Show, ZButton, ZSkeleton } from "@/components";
+import { Show, ZButton, ZDurationInput, ZSkeleton } from "@/components";
 import { useDialog } from "@/hooks/useDialog";
 import { useMutationCart } from "@/modules/cart/hooks/useMutationCart";
 import { INITIAL_CART_FORM } from "@/modules/cart/utils/constans";
@@ -9,7 +9,7 @@ import { formatNumber } from "@/utils/number";
 import { Folder, Play, ShoppingCart, Tag } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
-import { useForm, useWatch } from "react-hook-form";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import { useVdieoDetail } from "../hooks/useVideoDetail";
 
 export default function VideoDetail() {
@@ -86,10 +86,20 @@ export default function VideoDetail() {
                   </div>
                 </div>
 
-                 {/* Create Option Component to choose the duration here! default option is 30 menitues, 1 hours, 2 hours , and user can input manually */}
+                <Controller
+                  name="duration_seconds"
+                  control={control}
+                  render={({ field }) => (
+                    <ZDurationInput
+                      value={field.value}
+                      onChange={field.onChange}
+                    />
+                  )}
+                />
 
                 <div className="flex items-center gap-4 mt-4">
                   <ZButton
+                    type="button"
                     className="flex items-center gap-2 "
                     onClick={() => {
                       if (status === "authenticated") {
@@ -101,9 +111,10 @@ export default function VideoDetail() {
                   >
                     <Play size={18} /> Watch Now
                   </ZButton>
-                 
+
                   <ZButton
                     variant="outline"
+                    type="button"
                     className="flex items-center gap-2"
                     onClick={() => {
                       if (status === "authenticated") {

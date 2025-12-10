@@ -3,8 +3,8 @@ import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
 
 const authPaths = ["/login", "/register"];
-const publicPaths = ["/categories", "/videos", "/tags", "/cart"];
-const protectedPaths = ["/orders", "/video-access"];
+const publicPaths = ["/categories", "/videos", "/tags"];
+const protectedPaths = ["/orders", "/video-access", "/cart"];
 const adminPrefix = "/admin";
 
 export async function proxy(request: NextRequest) {

@@ -1,18 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
-import { getPopularVideoCategories } from "../utils/services";
-import { PopularVideoCategoryType } from "dashboard-type";
+import { CartResponseType } from "cart-types";
+import { getCart } from "../utils/services";
 
-export function usePopularVideoCategories({
+export function useCart({
   enabled = true,
   onSuccess,
 }: {
   enabled?: boolean;
-  onSuccess?: (data: PopularVideoCategoryType[] | null) => void;
+  onSuccess?: (data: CartResponseType | null) => void;
 }) {
   return useQuery({
-    queryKey: ["popular-video-categories"],
+    queryKey: ["cart-list"],
     queryFn: async () => {
-      const res = await getPopularVideoCategories();
+      const res = await getCart();
 
       const data = res.data;
       if (!res.success || !data) return null;
