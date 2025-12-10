@@ -10,7 +10,7 @@ import { Folder, Play, ShoppingCart, Tag } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import { Controller, useForm, useWatch } from "react-hook-form";
-import { useVdieoDetail } from "../hooks/useVideoDetail";
+import { useVideoDetail } from "../hooks/useVideoDetail";
 
 export default function VideoDetail() {
   const { status } = useSession();
@@ -24,7 +24,7 @@ export default function VideoDetail() {
     name: "duration_seconds",
   });
 
-  const { data, isPending } = useVdieoDetail({
+  const { data, isPending } = useVideoDetail({
     enabled: !isEmpty(videoID),
     video_id: Number(videoID),
   });
