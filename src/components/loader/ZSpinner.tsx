@@ -29,7 +29,6 @@ export function ZSpinner({
     default: "text-current",
     rose: "text-rose-500",
     emerald: "text-emerald-500",
-    rose: "text-rose-500",
   };
 
   const spinnerSizeClass = sizeClassMap[size] || sizeClassMap.md;
