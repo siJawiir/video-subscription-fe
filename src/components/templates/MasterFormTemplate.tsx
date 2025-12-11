@@ -9,6 +9,7 @@ import {
 import { Plus } from "lucide-react";
 import { ReactNode } from "react";
 import CardHeader from "../layout/CardHeader";
+import { cn } from "@/lib/utils";
 
 interface MasterFormTemplateProps {
   title?: string;
@@ -24,29 +25,26 @@ export default function MasterFormTemplate({
   subtitle,
   isOpen,
   onToggle,
-  addLabel = "Tambah",
+  addLabel = "Add",
   children,
 }: MasterFormTemplateProps) {
   return (
     <div className="space-y-4">
       <Collapsible open={isOpen}>
-        {/* Header + Trigger */}
-        <div className="flex justify-between items-center">
+        <div
+          className={cn(
+            "flex justify-between items-center bg-linear-to-r from-black via-red-900 to-black p-4  shadow-2xl border border-red-800",
+            isOpen ? "rounded-t-xl" : "rounded-xl"
+          )}
+        >
           <CardHeader title={title} subtitle={subtitle} />
 
           <CollapsibleTrigger asChild>
             <ZButton
               onClick={onToggle}
-              className={`
-                flex items-center gap-2 text-white shadow-md rounded-lg transition-all duration-300
-                ${
-                  isOpen
-                    ? "bg-rose-600 hover:bg-rose-700"
-                    : "bg-sky-600 hover:bg-sky-700"
-                }
-              `}
+              className="flex items-center gap-2 text-lg"
             >
-              {isOpen ? "Tutup" : addLabel}
+              {isOpen ? "Close" : addLabel}
               <Plus
                 className={`w-4 h-4 transition-transform duration-300 ${
                   isOpen ? "rotate-45" : "rotate-0"
@@ -56,8 +54,7 @@ export default function MasterFormTemplate({
           </CollapsibleTrigger>
         </div>
 
-        {/* Collapsible Content */}
-        <CollapsibleContent className="p-6 bg-white rounded-xl shadow-lg border border-gray-100 transition-all duration-300">
+        <CollapsibleContent className="p-6 rounded-b-xl shadow-inner border border-red-800 text-gray-100 transition-all duration-300">
           {children}
         </CollapsibleContent>
       </Collapsible>

@@ -1,8 +1,8 @@
-import { apiGetService } from "@/lib/axios";
+import { apiGetListService, apiGetService } from "@/lib/axios";
 import { VideoParamsType, VideoResponseType } from "video-type";
 
 export async function getVideos(params: VideoParamsType) {
-  return await apiGetService<VideoResponseType[], VideoParamsType>({
+  return await apiGetListService<VideoResponseType, VideoParamsType>({
     url: "/videos",
     params,
   });

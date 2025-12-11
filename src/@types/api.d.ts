@@ -1,15 +1,18 @@
 export interface ApiResponse<T> {
-  error: string;
+  error?: string;
   success: boolean;
   message: string;
   data?: T;
 }
 
-export interface PaginatedResponse<T> extends ApiResponse<T[]> {
-  current_page: number;
-  per_page: number;
-  total: number;
-  last_page: number;
+export interface PaginatedResponse<T> {
+  data: T[];
+  meta: {
+    current_page: number;
+    per_page: number;
+    total: number;
+    last_page: number;
+  };
 }
 
 export type ApiError = {

@@ -1,7 +1,6 @@
-import { initialPagination } from "@/constants/constants";
 import {
-  VideoCategoryParamsType,
   VideoCategoryFormType,
+  VideoCategoryParamsType,
 } from "admin-category-type";
 
 export const initialCategory: VideoCategoryFormType = {
@@ -11,7 +10,8 @@ export const initialCategory: VideoCategoryFormType = {
 };
 
 export const initialCategoryFilter: VideoCategoryParamsType = {
-  ...initialPagination,
-  name: "",
-  status: 1,
+  current_page: 1,
+  per_page: 10,
+  sort_by: "created_at",
+  order_by: "desc",
 };

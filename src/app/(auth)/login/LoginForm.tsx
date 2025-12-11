@@ -22,7 +22,7 @@ export default function LoginForm() {
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: LoginFormData) => {
-      logInfo("LoginForm", "Proses login dimulai", data);
+      logInfo("LoginForm", "Login Success", data);
       const res = await signIn("credentials", {
         redirect: false,
         username: data.username,
@@ -33,13 +33,13 @@ export default function LoginForm() {
       return res;
     },
     onSuccess: async () => {
-      toast.success("Login berhasil!");
-      logInfo("LoginForm", "Login berhasil, mengarahkan ke dashboard");
+      toast.success("Login Success!");
+      logInfo("LoginForm", "Login Success, redirect to home page");
       router.push("/");
     },
     onError: (err) => {
       const message =
-        err instanceof Error ? err.message : "Terjadi kesalahan login";
+        err instanceof Error ? err.message : "Login failed, please try again.";
       toast.error(message);
       logError("LoginForm", err);
     },
@@ -52,7 +52,7 @@ export default function LoginForm() {
       <ZTextInput
         label="Username"
         type="username"
-        placeholder="Masukkan username"
+        placeholder="Type your username"
         error={form.formState.errors.username?.message}
         {...form.register("username")}
       />
@@ -60,13 +60,13 @@ export default function LoginForm() {
       <ZTextInput
         label="Password"
         type="password"
-        placeholder="Masukkan password"
+        placeholder="Type your password"
         error={form.formState.errors.password?.message}
         {...form.register("password")}
       />
 
       <ZButton type="submit" className="w-full" isPending={isPending}>
-        Masuk
+        Login
       </ZButton>
 
       <ZButton
@@ -75,7 +75,7 @@ export default function LoginForm() {
         variant="ghost"
         onClick={() => router.push("/register")}
       >
-        Belum punya akun? Daftar Sekarang!
+        Dont have an account? <span className="underline">Register Now</span>
       </ZButton>
     </form>
   );

@@ -1,7 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { VideoCategoryResponseType } from "category-type";
+import { VideoTagResponseType } from "admin-tag-type";
 
-export const columns: ColumnDef<VideoCategoryResponseType>[] = [
+export const columns: ColumnDef<VideoTagResponseType>[] = [
   {
     header: "Name",
     accessorKey: "name",

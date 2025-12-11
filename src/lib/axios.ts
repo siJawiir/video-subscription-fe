@@ -1,7 +1,8 @@
+import { ApiResponse, PaginatedResponse } from "@/@types/api";
 import { isEmpty } from "@/utils/data";
 import axios, { AxiosRequestConfig } from "axios";
 import { getSession } from "next-auth/react";
-import { ApiResponse, handleError, handleSuccess } from "./handlers/handlers";
+import { handleError } from "./handlers/handlers";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -48,17 +49,9 @@ export async function apiRequest<
 
     const response = await axios<ApiResponse<TResponse>>(config);
 
-    if (
-      response.data &&
-      typeof response.data === "object" &&
-      "success" in response.data
-    ) {
-      return response.data;
-    }
-
-    return handleSuccess<TResponse>(response.data as TResponse);
+    return response.data;
   } catch (error) {
-    return handleError<TResponse>("Gagal memproses permintaan.", error);
+    return handleError<TResponse>("Failed to send data", error);
   }
 }
 
@@ -71,6 +64,48 @@ export const apiGetService = <
 >(
   options: FetchOptions<undefined, TParams>
 ) => apiRequest<TResponse, undefined, TParams>("GET", options);
+
+/**
+ * Helper GET LIST
+ */
+interface ApiGetListOptions<TParams> {
+  url: string;
+  params: TParams;
+}
+
+export async function apiGetListService<
+  TData,
+  TParams extends { current_page?: number; per_page?: number }
+>({
+  url,
+  params,
+}: ApiGetListOptions<TParams>): Promise<ApiResponse<PaginatedResponse<TData>>> {
+  // TResponse = PaginatedResponse<TData>
+  const res = await apiRequest<PaginatedResponse<TData>, undefined, TParams>(
+    "GET",
+    { url, params }
+  );
+
+  // Jika gagal → fallback empty paginated
+  if (!res.success || !res.data) {
+    return {
+      success: false,
+      message: res.message ?? "No data",
+      data: {
+        data: [],
+        meta: {
+          current_page: params.current_page ?? 1,
+          per_page: params.per_page ?? 10,
+          total: 0,
+          last_page: 0,
+        },
+      },
+    };
+  }
+
+  // Data valid → langsung return response dari BE
+  return res;
+}
 
 /**
  * Helper POST

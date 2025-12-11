@@ -44,7 +44,9 @@ export default function RegisterForm() {
       return data;
     },
     onSuccess: async (variables) => {
-      toast.success("Registrasi berhasil! Sedang login...");
+      toast.success(
+        "Your account has been created! We are going to homepage right now!"
+      );
 
       const result = await signIn("credentials", {
         redirect: false,
@@ -53,16 +55,18 @@ export default function RegisterForm() {
       });
 
       if (result?.error) {
-        toast.error("Login otomatis gagal, silakan login manual.");
+        toast.error("Login failed, please try again with manually login.");
         router.replace("/login");
       } else {
-        toast.success("Login berhasil!");
+        toast.success("Login success!");
         router.replace("/");
       }
     },
     onError: (error) => {
       toast.error(
-        error instanceof Error ? error.message : "Terjadi kesalahan."
+        error instanceof Error
+          ? error.message
+          : "Registration failed, please try again."
       );
     },
   });
@@ -73,7 +77,7 @@ export default function RegisterForm() {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
       <ZTextInput
         label="Username"
-        placeholder="Masukkan username"
+        placeholder="Type your username"
         error={errors.username?.message}
         {...register("username")}
       />
@@ -81,15 +85,15 @@ export default function RegisterForm() {
       <ZTextInput
         label="Password"
         type="password"
-        placeholder="Masukkan password"
+        placeholder="Type your password"
         error={errors.password?.message}
         {...register("password")}
       />
 
       <ZTextInput
-        label="Konfirmasi Password"
+        label="Confirm Password"
         type="password"
-        placeholder="Ulangi password"
+        placeholder="Retype your password"
         error={errors.confirmPassword?.message}
         {...register("confirmPassword")}
       />
@@ -104,7 +108,7 @@ export default function RegisterForm() {
         className="w-full"
         onClick={() => router.push("/login")}
       >
-        Sudah punya akun? Masuk
+        Already have an account? <span className="underline">Login</span>
       </ZButton>
     </form>
   );

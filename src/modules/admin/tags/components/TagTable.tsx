@@ -7,25 +7,22 @@ import { useDialog } from "@/hooks/useDialog";
 import { usePaginatedQuery } from "@/hooks/usePaginatedQuery";
 import { scrollToTop } from "@/utils/scroll";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  VideoCategoryFormType,
-  VideoCategoryParamsType,
-} from "admin-category-type";
-import { VideoCategoryResponseType } from "category-type";
+import { VideoTagFormType, VideoTagParamsType } from "admin-tag-type";
+import { VideoTagResponseType } from "admin-tag-type";
 import React from "react";
 import { useFormContext } from "react-hook-form";
-import { initialCategoryFilter } from "../utils/constants";
+import { initialTagFilter } from "../utils/constants";
 import { columns } from "../utils/data-table";
-import { deleteCategory, getCategory } from "../utils/services";
+import { deleteTag, getTag } from "../utils/services";
 
-export default function CategoryTable() {
+export default function TagTable() {
   const datatable = useDatatable({
-    initialPage: initialCategoryFilter.current_page,
-    initialPageSize: initialCategoryFilter.per_page,
-    initialFilters: initialCategoryFilter,
+    initialPage: initialTagFilter.current_page,
+    initialPageSize: initialTagFilter.per_page,
+    initialFilters: initialTagFilter,
   });
 
-  const fCategory = useFormContext<VideoCategoryFormType>();
+  const fTag = useFormContext<VideoTagFormType>();
   const queryClient = useQueryClient();
 
   const { open: openDialog, handleOpen, handleClose } = useDialog();
@@ -33,16 +30,16 @@ export default function CategoryTable() {
   const [itemToDelete, setItemToDelete] = React.useState<number | null>(null);
 
   const { data, isLoading, refetch } = usePaginatedQuery<
-    VideoCategoryResponseType,
-    VideoCategoryParamsType
+    VideoTagResponseType,
+    VideoTagParamsType
   >({
     queryKey: [
-      "video-category-list",
+      "video-tag-list",
       datatable.filters,
       datatable.page,
       datatable.sorting,
     ],
-    fetchFn: getCategory,
+    fetchFn: getTag,
     params: {
       ...datatable.filters,
       current_page: datatable.page,
@@ -51,21 +48,21 @@ export default function CategoryTable() {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (video_category_id: number) => {
-      return deleteCategory({ video_category_id });
+    mutationFn: (video_tag_id: number) => {
+      return deleteTag({ video_tag_id });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["video-category-list"] });
+      queryClient.invalidateQueries({ queryKey: ["video-tag-list"] });
       scrollToTop();
-      fCategory.reset();
+      fTag.reset();
     },
     onError: (error) => {
       console.error("Delete failed:", error);
     },
   });
 
-  const handleDeleteClick = (video_category_id: number) => {
-    setItemToDelete(video_category_id);
+  const handleDeleteClick = (video_tag_id: number) => {
+    setItemToDelete(video_tag_id);
     handleOpen();
   };
 
@@ -84,7 +81,7 @@ export default function CategoryTable() {
 
   return (
     <>
-      <ZDataTable<VideoCategoryResponseType>
+      <ZDataTable<VideoTagResponseType>
         columns={columns}
         data={data?.data?.data || []}
         total={data?.data?.meta.total || 0}
@@ -108,17 +105,17 @@ export default function CategoryTable() {
         loading={isLoading}
         onEdit={(row) => {
           scrollToTop();
-          fCategory.reset(row);
+          fTag.reset(row);
         }}
         onDelete={(row) => {
-          handleDeleteClick(row.video_category_id!);
+          handleDeleteClick(row.video_tag_id!);
         }}
       />
 
       <WarningAlert
         open={openDialog}
         onOpenChange={handleOpen}
-        title="Delete this category?"
+        title="Delete this tag?"
         subtitle="You won't be able to revert this."
         onCancel={handleConfirmCancel}
         onAgree={handleConfirmAgree}

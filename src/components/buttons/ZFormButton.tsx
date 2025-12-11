@@ -21,15 +21,13 @@ export const ZFormButton: React.FC<ZFormButtonProps> = ({
   className = "",
   isEditing = false,
 }) => {
-  const finalSubmitLabel =
-    submitLabel ?? (isEditing ? "Simpan Perubahan" : "Simpan");
+  const finalSubmitLabel = submitLabel ?? (isEditing ? "Save Changes" : "Save");
 
   return (
     <div className={`flex flex-col sm:flex-row gap-2 ${className}`}>
-      {/* Tombol Reset */}
       <ZButton
         type="button"
-        variant="ghost"
+        variant="outline"
         className="flex-1 w-full flex items-center justify-center gap-2
                    text-rose-300 hover:text-white hover:shadow-[0_0_10px_#ff3c78]"
         onClick={onReset}
@@ -39,7 +37,6 @@ export const ZFormButton: React.FC<ZFormButtonProps> = ({
         {resetLabel}
       </ZButton>
 
-      {/* Tombol Submit */}
       <ZButton
         type="submit"
         className={`flex-1 w-full flex items-center justify-center gap-2 ${
@@ -52,7 +49,7 @@ export const ZFormButton: React.FC<ZFormButtonProps> = ({
         {isPending ? (
           <>
             <Loader2 className="w-4 h-4 animate-spin text-white" />
-            Menyimpan...
+            Saving...
           </>
         ) : (
           <>

@@ -1,9 +1,4 @@
-export interface ApiResponse<T> {
-  success: boolean;
-  message: string;
-  data?: T;
-  error?: string;
-}
+import { ApiResponse } from "@/@types/api";
 
 /**
  * Return response sukses

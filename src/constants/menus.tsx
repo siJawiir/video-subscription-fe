@@ -1,20 +1,25 @@
-import { Film, Layers, Tags } from "lucide-react";
+import { Film, Layers, ShoppingBag, Tags } from "lucide-react";
 import { MenuItem } from "menu-types";
 
 export const menu: MenuItem[] = [
   {
-    label: "Film",
+    label: "Videos",
     icon: <Film size={16} />,
-    href: "/",
+    href: "/admin/videos",
   },
   {
-    label: "Kategori",
+    label: "Categories",
     icon: <Layers size={16} />,
-    href: "/categories",
+    href: "/admin/categories",
   },
   {
-    label: "Tag",
+    label: "Tags",
     icon: <Tags size={16} />,
-    href: "/tags",
+    href: "/admin/tags",
+  },
+  {
+    label: "Orders",
+    icon: <ShoppingBag size={16} />,
+    href: "/admin/orders",
   },
 ];

@@ -27,7 +27,6 @@ export const ZTextInput = React.forwardRef<HTMLInputElement, ZTextInputProps>(
     ref
   ) => {
     const hasIcon = !!icon;
-
     const errorMessage = typeof error === "string" ? error : error?.message;
 
     return (
@@ -36,28 +35,21 @@ export const ZTextInput = React.forwardRef<HTMLInputElement, ZTextInputProps>(
         {label && (
           <label
             className={cn(
-              "mb-1 text-xs font-semibold tracking-widest uppercase flex items-center gap-1",
-              errorMessage
-                ? "text-red-500 drop-shadow-[0_0_6px_rgba(255,0,0,0.6)]"
-                : "text-red-300/80"
+              "mb-1 text-xs font-semibold tracking-widest flex items-center gap-1",
+              errorMessage ? "text-red-600" : "text-gray-300"
             )}
           >
             {label}
-            {required && (
-              <span className="text-red-500 drop-shadow-[0_0_4px_rgba(255,0,0,0.8)]">
-                *
-              </span>
-            )}
+            {required && <span className="text-red-600">*</span>}
           </label>
         )}
 
-        {/* Input Container */}
         <div className="relative w-full">
           {icon && iconPosition === "left" && (
             <span
               className={cn(
-                "absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none",
-                errorMessage ? "text-red-500" : "text-red-400/60"
+                "absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400",
+                errorMessage && "text-red-600"
               )}
             >
               {icon}
@@ -68,19 +60,10 @@ export const ZTextInput = React.forwardRef<HTMLInputElement, ZTextInputProps>(
             ref={ref}
             {...props}
             className={cn(
-              "w-full bg-black/60 border border-red-900/40 text-red-200 placeholder-red-300/40",
-              "transition-colors duration-200",
-              "focus-visible:border-red-600 focus-visible:ring-red-600 focus-visible:ring-2",
-              "hover:border-red-600/70",
-
+              "w-full bg-black/10 border border-gray-600 rounded-lg transition-colors focus:border-rose-600 focus:ring-rose-600",
               hasIcon && iconPosition === "left" && "pl-10",
               hasIcon && iconPosition === "right" && "pr-10",
-
-              errorMessage &&
-                "border-red-600 text-red-400 placeholder-red-500 focus-visible:ring-red-700",
-
-              "rounded-xl shadow-[inset_0_0_8px_rgba(255,0,0,0.4)]",
-
+              errorMessage && "border-red-600 text-red-700 placeholder-red-400",
               className
             )}
           />
@@ -88,8 +71,8 @@ export const ZTextInput = React.forwardRef<HTMLInputElement, ZTextInputProps>(
           {icon && iconPosition === "right" && (
             <span
               className={cn(
-                "absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none",
-                errorMessage ? "text-red-500" : "text-red-400/60"
+                "absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400",
+                errorMessage && "text-red-600"
               )}
             >
               {icon}
@@ -99,9 +82,7 @@ export const ZTextInput = React.forwardRef<HTMLInputElement, ZTextInputProps>(
 
         {/* Error */}
         {errorMessage && (
-          <p className="mt-1 text-xs tracking-wide text-red-500 drop-shadow-[0_0_6px_rgba(255,0,0,0.5)]">
-            {errorMessage}
-          </p>
+          <p className="mt-1 text-xs text-red-600">{errorMessage}</p>
         )}
       </div>
     );

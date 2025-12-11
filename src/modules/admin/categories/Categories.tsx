@@ -35,11 +35,11 @@ export default function Categories() {
     <div className="max-w-6xl mx-auto p-6 space-y-6">
       <FormProvider {...methods}>
         <MasterFormTemplate
-          title="Daftar Jabatan"
-          subtitle="Menu ini menampilkan dan mengelola seluruh jabatan yang ada"
+          title="Video Category List"
+          subtitle="This is a list of video categories."
           isOpen={isFormOpen}
           onToggle={handleToggle}
-          addLabel="Tambah Jabatan Baru"
+          addLabel="Add Video Category"
         >
           <CategoryForm />
         </MasterFormTemplate>

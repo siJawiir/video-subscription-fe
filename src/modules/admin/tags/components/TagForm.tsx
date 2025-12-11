@@ -3,48 +3,45 @@
 import { ZFormButton } from "@/components/buttons";
 import { ZTextareaInput, ZTextInput } from "@/components/inputs";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  VideoCategoryFormType,
-  VideoCategoryUpdateFormType,
-} from "admin-category-type";
+import { VideoTagFormType, VideoTagUpdateFormType } from "admin-admin-tag-type";
 import { SubmitHandler, useFormContext, useWatch } from "react-hook-form";
 import { toast } from "sonner";
-import { initialCategory } from "../utils/constants";
-import { createCategory, updateCategory } from "../utils/services";
+import { initialTag } from "../utils/constants";
+import { createTag, updateTag } from "../utils/services";
 import { ApiResponse } from "@/@types/api";
 import { isEmpty } from "@/utils/data";
 
-export default function CategoryForm() {
+export default function TagForm() {
   const queryClient = useQueryClient();
 
   const { register, formState, reset, handleSubmit, setValue, control } =
-    useFormContext<VideoCategoryFormType>();
+    useFormContext<VideoTagFormType>();
 
   const ID = useWatch({
     control,
-    name: "video_category_id",
+    name: "video_tag_id",
   });
 
-  type MutationResponse = ApiResponse<VideoCategoryFormType>;
+  type MutationResponse = ApiResponse<VideoTagFormType>;
 
-  const mutation = useMutation<MutationResponse, Error, VideoCategoryFormType>({
+  const mutation = useMutation<MutationResponse, Error, VideoTagFormType>({
     mutationFn: (data) =>
-      data.video_category_id
-        ? updateCategory(data as VideoCategoryUpdateFormType)
-        : createCategory(data),
+      data.video_tag_id
+        ? updateTag(data as VideoTagUpdateFormType)
+        : createTag(data),
     onSuccess: (response, variables) => {
-      const action = variables.video_category_id ? "updated" : "created";
+      const action = variables.video_tag_id ? "updated" : "created";
 
       if (response.success) {
-        toast.success(`Video Category successfully ${action}`, {
+        toast.success(`Video Tag successfully ${action}`, {
           description: response.message ?? "Data successfully saved.",
         });
         queryClient.invalidateQueries({
-          queryKey: ["video-category-list"],
+          queryKey: ["video-tag-list"],
         });
 
-        if (!variables.video_category_id) {
-          reset(initialCategory);
+        if (!variables.video_tag_id) {
+          reset(initialTag);
         }
       } else {
         toast.error("Failed to send data", {
@@ -60,7 +57,7 @@ export default function CategoryForm() {
     },
   });
 
-  const onSubmit: SubmitHandler<VideoCategoryFormType> = (data) => {
+  const onSubmit: SubmitHandler<VideoTagFormType> = (data) => {
     mutation.mutate(data);
   };
 
@@ -69,7 +66,7 @@ export default function CategoryForm() {
       <div className="grid grid-cols-1 gap-6">
         <ZTextInput
           label="Name"
-          placeholder="input category name"
+          placeholder="input tag name"
           {...register("name")}
           required
           error={formState.errors.name?.message}
@@ -77,7 +74,7 @@ export default function CategoryForm() {
 
         <ZTextInput
           label="Slug"
-          placeholder="input category slug"
+          placeholder="input tag slug"
           {...register("slug")}
           required
           error={formState.errors.slug?.message}
@@ -90,7 +87,7 @@ export default function CategoryForm() {
 
         <ZTextareaInput
           label="Description"
-          placeholder="input category description (opsional)"
+          placeholder="input tag description (opsional)"
           {...register("description")}
           error={formState.errors.description?.message}
         />
@@ -99,7 +96,7 @@ export default function CategoryForm() {
       <ZFormButton
         isPending={mutation.isPending}
         onReset={() => {
-          reset(initialCategory);
+          reset(initialTag);
         }}
         submitLabel={isEmpty(ID) ? "Save" : "Save Changes"}
       />

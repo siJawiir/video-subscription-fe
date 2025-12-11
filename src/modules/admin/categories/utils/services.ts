@@ -1,22 +1,19 @@
 import {
   apiDeleteService,
-  apiGetService,
+  apiGetListService,
   apiPostService,
-  apiPutService,
+  apiPutService
 } from "@/lib/axios";
 import {
-  VideoCategoryUpdateFormType,
   VideoCategoryFormType,
   VideoCategoryParamsType,
+  VideoCategoryUpdateFormType,
 } from "admin-category-type";
 import { VideoCategoryResponseType } from "category-type";
 
 export async function getCategory(params: VideoCategoryParamsType) {
-  return await apiGetService<
-    { data: VideoCategoryResponseType[]; total: number },
-    VideoCategoryParamsType
-  >({
-    url: "categories",
+  return await  apiGetListService<VideoCategoryResponseType, VideoCategoryParamsType>({
+    url: "video-categories",
     params,
   });
 }
@@ -24,7 +21,7 @@ export async function getCategory(params: VideoCategoryParamsType) {
 export async function createCategory(payload: VideoCategoryFormType) {
   return await apiPostService<VideoCategoryResponseType, VideoCategoryFormType>(
     {
-      url: "categories",
+      url: "video-categories",
       payload,
     }
   );
@@ -35,7 +32,7 @@ export async function updateCategory(payload: VideoCategoryUpdateFormType) {
     VideoCategoryResponseType,
     VideoCategoryUpdateFormType
   >({
-    url: `categories/${payload.video_category_id}`,
+    url: `video-categories/${payload.video_category_id}`,
     payload,
   });
 }
@@ -45,7 +42,7 @@ export async function deleteCategory(payload: { video_category_id: number }) {
     VideoCategoryResponseType,
     { video_category_id: number }
   >({
-    url: `categories/${payload.video_category_id}`,
+    url: `video-categories/${payload.video_category_id}`,
     payload,
   });
 }

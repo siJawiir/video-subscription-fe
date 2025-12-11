@@ -1,4 +1,5 @@
 declare module "admin-category-type" {
+  import { PaginationParams } from "@/@types/table";
   export interface VideoCategoryUpdateFormType {
     video_category_id: number;
     name: string;
@@ -14,7 +15,6 @@ declare module "admin-category-type" {
   };
 
   export type VideoCategoryParamsType = PaginationParams<{
-    name?: string;
-    slug?: string;
+    search?: string;
   }>;
 }

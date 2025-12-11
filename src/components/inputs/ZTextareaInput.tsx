@@ -30,6 +30,7 @@ export const ZTextareaInput = React.forwardRef<
     ref
   ) => {
     const hasIcon = !!icon;
+    const errorMessage = error;
 
     return (
       <div className="flex flex-col w-full">
@@ -37,30 +38,22 @@ export const ZTextareaInput = React.forwardRef<
         {label && (
           <label
             className={cn(
-              "mb-1 text-xs font-semibold tracking-widest uppercase flex items-center gap-1",
-              error
-                ? "text-red-500 drop-shadow-[0_0_6px_rgba(255,0,0,0.6)]"
-                : "text-red-300/80"
+              "mb-1 text-xs font-semibold tracking-widest flex items-center gap-1",
+              errorMessage ? "text-red-600" : "text-gray-300"
             )}
           >
             {label}
-            {required && (
-              <span className="text-red-500 drop-shadow-[0_0_4px_rgba(255,0,0,0.8)]">
-                *
-              </span>
-            )}
+            {required && <span className="text-red-600">*</span>}
           </label>
         )}
 
-        {/* Container */}
         <div className="relative w-full">
-
           {/* Icon Left */}
           {icon && iconPosition === "left" && (
             <span
               className={cn(
-                "absolute left-3 top-3 pointer-events-none",
-                error ? "text-red-500" : "text-red-400/60"
+                "absolute left-3 top-3 pointer-events-none text-gray-400",
+                errorMessage && "text-red-600"
               )}
             >
               {icon}
@@ -72,18 +65,10 @@ export const ZTextareaInput = React.forwardRef<
             ref={ref}
             {...props}
             className={cn(
-              "w-full bg-black/60 text-red-200 placeholder-red-300/40",
-              "border border-red-900/40 rounded-xl shadow-[inset_0_0_8px_rgba(255,0,0,0.4)]",
-              "transition-all duration-200",
-              "focus-visible:border-red-600 focus-visible:ring-red-600 focus-visible:ring-2",
-              "hover:border-red-600/70",
-
+              "w-full bg-black/10 border border-gray-600 rounded-lg transition-colors focus:border-rose-600 focus:ring-rose-600",
               hasIcon && iconPosition === "left" && "pl-10",
               hasIcon && iconPosition === "right" && "pr-10",
-
-              error &&
-                "border-red-600 text-red-400 placeholder-red-500 focus-visible:ring-red-700",
-
+              errorMessage && "border-red-600 text-red-700 placeholder-red-400",
               className
             )}
           />
@@ -92,8 +77,8 @@ export const ZTextareaInput = React.forwardRef<
           {icon && iconPosition === "right" && (
             <span
               className={cn(
-                "absolute right-3 top-3 pointer-events-none",
-                error ? "text-red-500" : "text-red-400/60"
+                "absolute right-3 top-3 pointer-events-none text-gray-400",
+                errorMessage && "text-red-600"
               )}
             >
               {icon}
@@ -102,10 +87,8 @@ export const ZTextareaInput = React.forwardRef<
         </div>
 
         {/* Error */}
-        {error && (
-          <p className="mt-1 text-xs tracking-wide text-red-500 drop-shadow-[0_0_6px_rgba(255,0,0,0.5)]">
-            {error}
-          </p>
+        {errorMessage && (
+          <p className="mt-1 text-xs text-red-600">{errorMessage}</p>
         )}
       </div>
     );

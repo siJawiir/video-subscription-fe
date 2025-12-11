@@ -1,7 +1,13 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -22,15 +28,15 @@ import {
   SortingState,
   useReactTable,
 } from "@tanstack/react-table";
-import { ReactNode, useState } from "react";
-import { Edit, LucideSearch, MoreHorizontal, Trash2 } from "lucide-react";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  Edit,
+  LucideSearch,
+  MoreHorizontal,
+  Trash2,
+} from "lucide-react";
+import { ReactNode, useState } from "react";
 import { ZButton } from "../buttons";
 import { ZEmptyCard } from "../cards";
 import { Show } from "../utils";
@@ -102,7 +108,7 @@ export function ZDataTable<TData>({
   const totalPages = Math.ceil(total / pageSize);
 
   return (
-    <div className="w-full overflow-x-auto border rounded-lg shadow-sm bg-white p-4">
+    <div className="w-full overflow-x-auto border rounded-lg shadow-lg p-4">
       {/* Global Search */}
       <div className="flex justify-end mb-3">
         <div className="relative w-64">
@@ -115,7 +121,7 @@ export function ZDataTable<TData>({
               onFilterChange?.(value);
               onPageChange?.(1);
             }}
-            className="pr-10"
+            className="pr-10  text-gray-100 placeholder-gray-500 border-gray-700 focus:ring-rose-600 focus:border-rose-600"
           />
           <LucideSearch
             className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400"
@@ -124,12 +130,13 @@ export function ZDataTable<TData>({
         </div>
       </div>
 
-      {/* Table */}
-      <Table className="min-w-full border-collapse relative">
-        <TableHeader className="bg-gray-50">
+      <Table className="min-w-full border-collapse relative text-gray-100">
+        <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
-              {showRowNumber && <TableHead className="w-12">#</TableHead>}
+              {showRowNumber && (
+                <TableHead className="w-12 text-indigo-600">#</TableHead>
+              )}
               {enableRowSelection && (
                 <TableHead className="w-12">
                   <Checkbox
@@ -151,8 +158,8 @@ export function ZDataTable<TData>({
                   }}
                   className={`cursor-pointer select-none ${
                     header.column.getIsSorted()
-                      ? "text-blue-600 font-semibold"
-                      : "text-gray-700"
+                      ? "text-rose-400 font-semibold"
+                      : "text-gray-300"
                   }`}
                 >
                   <div className="flex items-center space-x-1">
@@ -168,9 +175,8 @@ export function ZDataTable<TData>({
                   </div>
                 </TableHead>
               ))}
-              {/* Actions column sticky */}
               <Show.When condition={showRowActions}>
-                <TableHead className="text-right sticky right-0 bg-gray-50 z-20">
+                <TableHead className="text-right sticky right-0 z-20">
                   Actions
                 </TableHead>
               </Show.When>
@@ -182,10 +188,10 @@ export function ZDataTable<TData>({
           {table.getRowModel().rows.map((row, rowIndex) => (
             <TableRow
               key={row.id}
-              className="hover:bg-gray-50 transition-colors"
+              className="hover:bg-black/15 transition-colors"
             >
               {showRowNumber && (
-                <TableCell className="py-2 px-3">
+                <TableCell className="py-2 px-3 text-indigo-600">
                   {(page - 1) * pageSize + rowIndex + 1}
                 </TableCell>
               )}
@@ -198,20 +204,27 @@ export function ZDataTable<TData>({
                 </TableCell>
               )}
               {row.getVisibleCells().map((cell) => (
-                <TableCell key={cell.id} className="py-2 px-3">
+                <TableCell key={cell.id} className="py-2 px-3 text-gray-200">
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </TableCell>
               ))}
               <Show.When condition={showRowActions}>
-                <TableCell className="text-right py-2 px-3 sticky right-0 bg-white z-10">
+                <TableCell className="text-right flex justify-end py-2 px-3 sticky right-0 z-10">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" className="h-8 w-8 p-0">
+                      <ZButton
+                        variant="ghost"
+                        size="sm"
+                        className="h-8 w-8 p-0"
+                      >
                         <span className="sr-only">Open menu</span>
                         <MoreHorizontal />
-                      </Button>
+                      </ZButton>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
+                    <DropdownMenuContent
+                      align="end"
+                      className="text-gray-100 border-gray-700"
+                    >
                       <DropdownMenuLabel>Actions</DropdownMenuLabel>
                       <DropdownMenuItem
                         onClick={() => onEdit?.(row.original)}
@@ -222,7 +235,7 @@ export function ZDataTable<TData>({
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onClick={() => onDelete?.(row.original)}
-                        className="flex items-center space-x-2 text-red-600 hover:text-red-700! hover:bg-red-50!"
+                        className="flex items-center space-x-2 text-red-600 hover:text-red-400 hover:bg-gray-700"
                       >
                         <Trash2 size={16} />
                         <span>Delete</span>
@@ -241,7 +254,7 @@ export function ZDataTable<TData>({
                   columns.length +
                   (enableRowSelection ? 1 : 0) +
                   (showRowNumber ? 1 : 0) +
-                  1 // actions
+                  1
                 }
                 className="text-center py-6 text-gray-400"
               >
@@ -255,7 +268,7 @@ export function ZDataTable<TData>({
       {/* Pagination */}
       {total > pageSize && onPageChange && (
         <div className="flex justify-between items-center mt-4">
-          <div className="text-gray-600 text-sm">
+          <div className="text-gray-400 text-sm">
             Page {page} of {totalPages} ({total} items)
           </div>
           <div className="flex space-x-2">
@@ -265,6 +278,7 @@ export function ZDataTable<TData>({
               disabled={page <= 1}
               onClick={() => onPageChange(page - 1)}
             >
+              <ChevronLeftIcon className="mr-1 h-4 w-4" />
               Previous
             </ZButton>
             <ZButton
@@ -274,6 +288,7 @@ export function ZDataTable<TData>({
               onClick={() => onPageChange(page + 1)}
             >
               Next
+              <ChevronRightIcon className="ml-1 h-4 w-4" />
             </ZButton>
           </div>
         </div>

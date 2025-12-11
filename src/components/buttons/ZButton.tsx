@@ -24,7 +24,7 @@ export default function ZButton({
   variant = "default",
   size = "md",
   isPending = false,
-  loadingText = "Memproses...",
+  loadingText = "Loading...",
   disabled,
   ...props
 }: ZButtonProps) {
