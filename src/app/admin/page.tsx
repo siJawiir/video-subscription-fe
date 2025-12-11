@@ -35,7 +35,7 @@ export default function AdminDashboardPage() {
   });
 
   if (status === "loading") return <Skeleton className="h-8 w-64" />;
-  
+
   if (!session)
     return (
       <p className="p-6 text-red-800 font-medium text-center">
@@ -64,7 +64,6 @@ export default function AdminDashboardPage() {
 
       <Separator className="bg-gray-800" />
 
-      {/* Stats Section */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {[
           {
@@ -121,7 +120,6 @@ export default function AdminDashboardPage() {
 
       <Separator className="bg-gray-800" />
 
-      {/* Latest Activity */}
       <Card
         className={cn(
           "relative border border-gray-800",

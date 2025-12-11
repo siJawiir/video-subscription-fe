@@ -5,7 +5,7 @@ import {
   apiPutService,
 } from "@/lib/axios";
 import {
-  CategoryUpdateFormType,
+  VideoCategoryUpdateFormType,
   VideoCategoryFormType,
   VideoCategoryParamsType,
 } from "admin-category-type";
@@ -30,13 +30,14 @@ export async function createCategory(payload: VideoCategoryFormType) {
   );
 }
 
-export async function updateCategory(payload: CategoryUpdateFormType) {
-  return await apiPutService<VideoCategoryResponseType, CategoryUpdateFormType>(
-    {
-      url: `categories/${payload.video_category_id}`,
-      payload,
-    }
-  );
+export async function updateCategory(payload: VideoCategoryUpdateFormType) {
+  return await apiPutService<
+    VideoCategoryResponseType,
+    VideoCategoryUpdateFormType
+  >({
+    url: `categories/${payload.video_category_id}`,
+    payload,
+  });
 }
 
 export async function deleteCategory(payload: { video_category_id: number }) {

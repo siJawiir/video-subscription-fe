@@ -4,7 +4,10 @@ import { ZFormButton } from "@/components/buttons";
 import { ZTextareaInput, ZTextInput } from "@/components/inputs";
 import { ApiResponse } from "@/lib/handlers/handlers";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { VideoCategoryFormType } from "admin-category-type";
+import {
+  VideoCategoryFormType,
+  VideoCategoryUpdateFormType,
+} from "admin-category-type";
 import { SubmitHandler, useFormContext } from "react-hook-form";
 import { toast } from "sonner";
 import { initialCategory } from "../utils/constants";
@@ -20,7 +23,9 @@ export default function CategoryForm() {
 
   const mutation = useMutation<MutationResponse, Error, VideoCategoryFormType>({
     mutationFn: (data) =>
-      data.video_category_id ? updateCategory(data) : createCategory(data),
+      data.video_category_id
+        ? updateCategory(data as VideoCategoryUpdateFormType)
+        : createCategory(data),
     onSuccess: (response, variables) => {
       const action = variables.video_category_id ? "diupdate" : "dibuat";
 

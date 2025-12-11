@@ -10,22 +10,21 @@ import {
 import { useDialog } from "@/hooks/useDialog";
 import { useMutationCart } from "@/modules/cart/hooks/useMutationCart";
 import { INITIAL_CART_FORM } from "@/modules/cart/utils/constans";
+import PopularVideos from "@/modules/dashboard/components/PopularVideos";
 import { isEmpty } from "@/utils/data";
 import { formatNumber } from "@/utils/number";
 import {
-  ChevronLeft,
   ChevronLeftIcon,
   Folder,
   Play,
   ShoppingCart,
-  Tag,
+  Tag
 } from "lucide-react";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { useVideoDetail } from "../hooks/useVideoDetail";
-import PopularVideos from "@/modules/dashboard/components/PopularVideos";
-import Link from "next/link";
 
 export default function VideoDetail() {
   const { status } = useSession();

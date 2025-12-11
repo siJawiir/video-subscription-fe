@@ -1,5 +1,5 @@
 declare module "admin-category-type" {
-  export interface CategoryUpdateFormType {
+  export interface VideoCategoryUpdateFormType {
     video_category_id: number;
     name: string;
     slug: string;
@@ -7,7 +7,7 @@ declare module "admin-category-type" {
   }
 
   export type VideoCategoryFormType = Omit<
-    CategoryUpdateFormType,
+    VideoCategoryUpdateFormType,
     "video_category_id"
   > & {
     video_category_id?: number;
