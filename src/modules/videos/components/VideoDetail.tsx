@@ -1,16 +1,31 @@
 "use client";
 
-import { Show, ZButton, ZDurationInput, ZSkeleton } from "@/components";
+import {
+  Show,
+  ZButton,
+  ZDurationInput,
+  ZIconButton,
+  ZSkeleton,
+} from "@/components";
 import { useDialog } from "@/hooks/useDialog";
 import { useMutationCart } from "@/modules/cart/hooks/useMutationCart";
 import { INITIAL_CART_FORM } from "@/modules/cart/utils/constans";
 import { isEmpty } from "@/utils/data";
 import { formatNumber } from "@/utils/number";
-import { Folder, Play, ShoppingCart, Tag } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronLeftIcon,
+  Folder,
+  Play,
+  ShoppingCart,
+  Tag,
+} from "lucide-react";
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { useVideoDetail } from "../hooks/useVideoDetail";
+import PopularVideos from "@/modules/dashboard/components/PopularVideos";
+import Link from "next/link";
 
 export default function VideoDetail() {
   const { status } = useSession();
@@ -51,8 +66,13 @@ export default function VideoDetail() {
           </div>
         </Show.When>
         <Show.When condition={!isPending}>
-          <div className="max-w-6xl mx-auto p-6">
+          <div className="max-w-6xl mx-auto p-6 relative">
             <div className="flex flex-col md:flex-row gap-8">
+              <div className="absolute top-6 -left-12">
+                <Link href="/videos">
+                  <ZIconButton icon={<ChevronLeftIcon />} />
+                </Link>
+              </div>
               <div className="flex-1 rounded-lg overflow-hidden shadow-2xl border border-zinc-800">
                 <Show.When condition={!!data?.video_url}>
                   <iframe
@@ -172,6 +192,10 @@ export default function VideoDetail() {
                 </div>
               </div>
             </div>
+          </div>
+          <div className="mt-8 p-6">
+            <p className="font-semibold mb-2">You might also like</p>
+            <PopularVideos />
           </div>
         </Show.When>
       </form>

@@ -25,7 +25,7 @@ export default function PopularVideos() {
             <Link
               key={video.video_id}
               href={`/videos/${video.video_id}`}
-              className="group relative bg-zinc-900 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition transform hover:scale-105 min-w-[220px]"
+              className="group relative bg-zinc-900 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition transform hover:scale-105 w-60"
             >
               <ZImage
                 src={video.thumbnail_url}
