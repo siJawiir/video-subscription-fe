@@ -65,7 +65,7 @@ export default function CartItemCard({
           : "bg-zinc-900 shadow-lg hover:shadow-xl border border-zinc-800"
       )}
     >
-      <div className="absolute top-2 left-2 z-20 bg-black/40 p-1 rounded-full h-8 w-8">
+      <div className="absolute top-2 left-2 z-20 bg-black/40 p-1 rounded-full h-8 w-8 cursor-pointer">
         <Checkbox
           checked={isSelected}
           onCheckedChange={() => handleSelect(cart)}
@@ -82,7 +82,7 @@ export default function CartItemCard({
         />
       </div>
       <div
-        className="relative md:w-48 w-full h-60 md:h-auto shrink-0"
+        className="relative md:w-48 w-full h-60 md:h-auto shrink-0 cursor-pointer"
         onClick={() => handleSelect(cart)}
       >
         <ZImage
