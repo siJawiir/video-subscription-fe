@@ -213,7 +213,7 @@ export function ZDataTable<TData>({
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <ZButton
-                        variant="ghost"
+                        variant="outline"
                         size="sm"
                         className="h-8 w-8 p-0"
                       >

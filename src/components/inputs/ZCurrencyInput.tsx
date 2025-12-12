@@ -21,52 +21,67 @@ export const ZCurrencyInput = React.forwardRef<
   ZCurrencyInputProps
 >(
   (
-    { value = 0, onValueChange, locale = "en-US", currency = "IDR", ...props },
+    {
+      value = 0,
+      onValueChange,
+      locale = "en-US",
+      currency = "IDR",
+      error,
+      icon,
+      iconPosition = "left",
+      label,
+      required,
+      ...props
+    },
     ref
   ) => {
-    const [raw, setRaw] = React.useState<string>("");
     const [mounted, setMounted] = React.useState(false);
+    const [raw, setRaw] = React.useState<string>(String(value ?? 0));
 
     React.useEffect(() => {
       setMounted(true);
     }, []);
 
-    const digitsToCents = (str: string) => {
-      const onlyDigits = str.replace(/\D/g, "");
-      if (!onlyDigits) return 0;
-      return parseInt(onlyDigits, 10);
-    };
-
     React.useEffect(() => {
-      setRaw(String(value));
+      setRaw(String(value ?? 0));
     }, [value]);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const input = e.target.value;
+
+      const cleaned = input.replace(/[^\d.,]/g, "");
+      setRaw(cleaned);
+
+      const numberValue = Number(cleaned.replace(/,/g, ""));
+      if (!isNaN(numberValue) && onValueChange) {
+        onValueChange(numberValue);
+      }
+    };
 
     const displayValue = mounted
       ? new Intl.NumberFormat(locale, {
           style: "currency",
           currency,
-          minimumFractionDigits: 2,
+          minimumFractionDigits: 0,
           maximumFractionDigits: 2,
-        }).format((Number(raw) || 0) / 100)
+        }).format(Number(raw.replace(/,/g, "")) || 0)
       : String(value);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const digits = e.target.value.replace(/\D/g, "");
-      setRaw(digits);
-
-      if (onValueChange) {
-        onValueChange(digitsToCents(digits));
-      }
-    };
-
     return (
-      <ZTextInput
-        {...props}
-        ref={ref}
-        value={displayValue}
-        onChange={handleChange}
-        inputMode="numeric"
-      />
+      <div className="flex flex-col w-full">
+        <ZTextInput
+          {...props}
+          ref={ref}
+          value={displayValue}
+          onChange={handleChange}
+          inputMode="numeric"
+          icon={icon}
+          iconPosition={iconPosition}
+          label={label}
+          required={required}
+        />
+        {error && <p className="mt-1 text-xs text-red-600">{error}</p>}
+      </div>
     );
   }
 );

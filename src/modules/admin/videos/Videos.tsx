@@ -8,9 +8,12 @@ import { FormProvider, useForm, useWatch } from "react-hook-form";
 import VideoForm from "./components/VideoForm";
 import VideoTable from "./components/VideoTable";
 import { initialVideo } from "./utils/constants";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { VideoFormSchema } from "@/schema/video";
 
 export default function Videos() {
   const methods = useForm<VideoFormType>({
+    resolver: zodResolver(VideoFormSchema),
     defaultValues: initialVideo,
   });
 

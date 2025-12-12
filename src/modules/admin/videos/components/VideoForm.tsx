@@ -5,8 +5,9 @@ import { ZFormButton } from "@/components/buttons";
 import {
   ZCurrencyInput,
   ZMultiOptionInput,
+  ZSwitchInput,
   ZTextareaInput,
-  ZTextInput
+  ZTextInput,
 } from "@/components/inputs";
 import { isEmpty } from "@/utils/data";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -20,12 +21,14 @@ import {
 import { toast } from "sonner";
 import { initialVideo } from "../utils/constants";
 import { createVideo, updateVideo } from "../utils/services";
+import { ResourceType } from "resource-types";
 
 export default function VideoForm() {
   const queryClient = useQueryClient();
 
-  const { register, formState, reset, handleSubmit, control } =
+  const { register, formState, reset, handleSubmit, control, getValues } =
     useFormContext<VideoFormType>();
+  console.log("🚀 ~ VideoForm ~ getValues:", getValues());
 
   const ID = useWatch({
     control,
@@ -66,7 +69,15 @@ export default function VideoForm() {
   });
 
   const onSubmit: SubmitHandler<VideoFormType> = (data) => {
-    mutation.mutate(data);
+    const payload = {
+      ...data,
+      categories:
+        data.categories?.map((category: ResourceType) => category.value) || [],
+      tags: data.tags?.map((tag: ResourceType) => tag.value) || [],
+    };
+    console.log("🚀 ~ onSubmit ~ data:", data);
+    console.log("🚀 ~ onSubmit ~ payload:", payload);
+    mutation.mutate(payload as unknown as VideoFormType);
   };
 
   return (
@@ -90,21 +101,27 @@ export default function VideoForm() {
               error={formState.errors.video_url?.message}
             />
           </div>
-
-          <ZCurrencyInput
-            label="Price"
-            placeholder="type video price /seconds"
-            {...register("price")}
-            required
-            error={formState.errors.price?.message}
-            icon={
-              <>
-                <div className="flex flex-col items-end bg-rose-900 px-1 py-0.5 rounded-md">
-                  <p className="text-sm text-white">/seconds</p>
-                </div>
-              </>
-            }
-            iconPosition="right"
+          <Controller
+            control={control}
+            name="price"
+            render={({ field }) => (
+              <ZCurrencyInput
+                label="Price"
+                value={field.value}
+                onValueChange={field.onChange}
+                placeholder="type video price /seconds"
+                required
+                error={formState.errors.price?.message}
+                icon={
+                  <>
+                    <div className="flex flex-col items-end bg-rose-900 px-1 py-0.5 rounded-md">
+                      <p className="text-sm text-white">/seconds</p>
+                    </div>
+                  </>
+                }
+                iconPosition="right"
+              />
+            )}
           />
         </div>
 
@@ -117,14 +134,36 @@ export default function VideoForm() {
               placeholder="Select categories..."
               value={field.value}
               onValueChange={field.onChange}
-              // options={[
-              //   { label: "Action", value: "action" },
-              //   { label: "Comedy", value: "comedy" },
-              //   { label: "Drama", value: "drama" },
-              // ]}
-              // required
               async
-              resource={'video'}
+              resource={"video-category"}
+            />
+          )}
+        />
+
+        <Controller
+          control={control}
+          name="tags"
+          render={({ field }) => (
+            <ZMultiOptionInput
+              label="Tags"
+              placeholder="Select tags..."
+              value={field.value}
+              onValueChange={field.onChange}
+              async
+              resource={"video-tag"}
+            />
+          )}
+        />
+
+        <Controller
+          name="is_active"
+          control={control}
+          render={({ field }) => (
+            <ZSwitchInput
+              label="is Video Active?"
+              description="If checked, video will be active and visible to users"
+              checked={field.value}
+              onCheckedChange={field.onChange}
             />
           )}
         />

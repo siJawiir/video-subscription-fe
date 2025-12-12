@@ -21,39 +21,29 @@ export const ZSwitchInput = React.forwardRef<
 
   return (
     <div className="flex flex-col w-full gap-2">
-      {/* Label */}
       {label && (
         <label
           className={cn(
-            "text-xs font-semibold tracking-widest uppercase flex items-center gap-1",
-            errorMessage
-              ? "text-red-500 drop-shadow-[0_0_6px_rgba(255,0,0,0.6)]"
-              : "text-red-300/80"
+            "mb-1 text-xs font-semibold tracking-widest flex items-center gap-1",
+            errorMessage ? "text-red-600" : "text-gray-300"
           )}
         >
           {label}
-          {required && (
-            <span className="text-red-500 drop-shadow-[0_0_4px_rgba(255,0,0,0.8)]">
-              *
-            </span>
-          )}
+          {required && <span className="text-red-600">*</span>}
         </label>
       )}
 
-      {/* Switch + description */}
       <div className="flex items-center gap-3">
         <Switch
           ref={ref}
           {...props}
           className={cn(
-            // Base
             "cursor-pointer border border-red-900/40 shadow-[0_0_10px_rgba(255,0,0,0.4)]",
             "data-[state=checked]:bg-red-600",
             "data-[state=checked]:border-red-600",
             "data-[state=checked]:shadow-[0_0_15px_rgba(255,0,0,0.7)]",
             "data-[state=unchecked]:bg-black/60",
 
-            // Error
             errorMessage &&
               "border-red-600 shadow-[0_0_12px_rgba(255,0,0,0.8)] ring-2 ring-red-600",
 
@@ -62,13 +52,10 @@ export const ZSwitchInput = React.forwardRef<
         />
 
         {description && (
-          <p className="text-xs text-red-400/60 tracking-wide">
-            {description}
-          </p>
+          <p className="text-xs text-red-400/60 tracking-wide">{description}</p>
         )}
       </div>
 
-      {/* Error */}
       {errorMessage && (
         <p className="text-xs tracking-wide text-red-500 drop-shadow-[0_0_6px_rgba(255,0,0,0.5)]">
           {errorMessage}

@@ -7,6 +7,7 @@ export const initialVideo: VideoFormType = {
   video_url: "",
   categories: [],
   tags: [],
+  is_active: true,
 };
 
 export const initialVideoFilter: VideoParamsType = {

@@ -4,4 +4,14 @@ export const MASTER_RESOURCES = {
     value: "",
     description: "",
   },
+  "video-tag": {
+    label: "",
+    value: "",
+    description: "",
+  },
+  "video-category": {
+    label: "",
+    value: "",
+    description: "",
+  },
 };

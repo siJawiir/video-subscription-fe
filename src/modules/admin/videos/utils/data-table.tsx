@@ -12,7 +12,7 @@ export const columns: ColumnDef<VideoResponseType>[] = [
     accessorKey: "title",
   },
   {
-    header: "Price",
+    header: "Price (/seconds)",
     accessorKey: "price",
   },
   {
@@ -24,11 +24,11 @@ export const columns: ColumnDef<VideoResponseType>[] = [
       const remainingCategories = categories.slice(3);
 
       return (
-        <div className="flex flex-wrap gap-1">
+        <div className="flex gap-1">
           {displayCategories.map((category) => (
             <div
               key={category.video_category_id}
-              className="text-zinc-400 text-xs font-semibold truncate bg-indigo-950 rounded-full px-2 py-0.5"
+              className="text-zinc-400 text-xs font-semibold truncate bg-indigo-950 rounded-full px-2 py-0.5 max-w-20"
             >
               {category.name}
             </div>
@@ -37,7 +37,7 @@ export const columns: ColumnDef<VideoResponseType>[] = [
           {remainingCategories.length > 0 && (
             <Tooltip>
               <TooltipTrigger>
-                <div className="text-zinc-400 text-xs font-semibold truncate bg-indigo-950 rounded-full px-2 py-0.5 cursor-pointer">
+                <div className="text-zinc-400 text-xs font-semibold truncate bg-indigo-950 rounded-full px-2 py-0.5 cursor-pointer max-w-20">
                   +{remainingCategories.length} more
                 </div>
               </TooltipTrigger>
@@ -45,7 +45,7 @@ export const columns: ColumnDef<VideoResponseType>[] = [
                 {remainingCategories.map((category) => (
                   <div
                     key={category.video_category_id}
-                    className="text-zinc-400 text-xs font-semibold"
+                    className="text-indigo-950 text-xs font-semibold"
                   >
                     {category.name}
                   </div>
@@ -66,11 +66,11 @@ export const columns: ColumnDef<VideoResponseType>[] = [
       const remainingTags = tags.slice(3);
 
       return (
-        <div className="flex flex-wrap gap-1">
+        <div className="flex gap-1">
           {displayTags.map((tag) => (
             <div
               key={tag.video_tag_id}
-              className="text-zinc-400 text-xs font-semibold truncate bg-indigo-950 rounded-full px-2 py-0.5"
+              className="text-zinc-400 text-xs font-semibold truncate bg-indigo-950 rounded-full px-2 py-0.5 max-w-20"
             >
               {tag.name}
             </div>
@@ -79,7 +79,7 @@ export const columns: ColumnDef<VideoResponseType>[] = [
           {remainingTags.length > 0 && (
             <Tooltip>
               <TooltipTrigger>
-                <div className="text-zinc-400 text-xs font-semibold truncate bg-indigo-950 rounded-full px-2 py-0.5 cursor-pointer">
+                <div className="text-zinc-400 text-xs font-semibold truncate bg-indigo-950 rounded-full px-2 py-0.5 cursor-pointer max-w-20">
                   +{remainingTags.length} more
                 </div>
               </TooltipTrigger>
@@ -87,7 +87,7 @@ export const columns: ColumnDef<VideoResponseType>[] = [
                 {remainingTags.map((tag) => (
                   <div
                     key={tag.video_tag_id}
-                    className="text-zinc-400 text-xs font-semibold"
+                    className="text-indigo-950 text-xs font-semibold"
                   >
                     {tag.name}
                   </div>
@@ -102,5 +102,18 @@ export const columns: ColumnDef<VideoResponseType>[] = [
   {
     header: "Description",
     accessorKey: "description",
+    cell: (info) => {
+      const desc = info.getValue() as string;
+      return (
+        <Tooltip>
+          <TooltipTrigger>
+            <div className="text-xs truncate max-w-[200px]">{desc}</div>
+          </TooltipTrigger>
+          <TooltipContent className="p-2 w-60">
+            <span className="text-indigo-950 text-xs">{desc}</span>
+          </TooltipContent>
+        </Tooltip>
+      );
+    },
   },
 ];

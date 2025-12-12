@@ -38,17 +38,16 @@ export default function ZButton({
     default:
       "bg-gradient-to-r from-rose-800 to-rose-950 text-white font-bold shadow-[0_0_8px_#ff3c78] hover:shadow-[0_0_16px_#ff3c78] hover:brightness-110",
     outline:
-      "bg-transparent border border-rose-700 text-rose-200 hover:text-white hover:shadow-[0_0_10px_#ff3c78]",
+      "bg-black/80 border hover:border-rose-700 text-rose-200 hover:text-white hover:shadow-[0_0_10px_#ff3c78]",
     ghost:
-      "bg-transparent text-rose-200 hover:text-white hover:shadow-[0_0_6px_#ff3c78]",
+      "text-rose-200 hover:text-white hover:shadow-[0_0_6px_#ff3c78]",
     destructive:
       "bg-red-700 text-white shadow-[0_0_8px_#ff3c78] hover:shadow-[0_0_16px_#ff3c78]",
     success:
       "bg-green-700 text-white shadow-[0_0_6px_#22ff99] hover:shadow-[0_0_12px_#22ff99]",
     warning:
       "bg-amber-500 text-black shadow-[0_0_6px_#ffdd55] hover:shadow-[0_0_12px_#ffdd55]",
-    info:
-      "bg-rose-600 text-white shadow-[0_0_8px_#ff3c78] hover:shadow-[0_0_14px_#ff3c78]",
+    info: "bg-rose-600 text-white shadow-[0_0_8px_#ff3c78] hover:shadow-[0_0_14px_#ff3c78]",
   };
 
   return (
@@ -56,13 +55,18 @@ export default function ZButton({
       {...props}
       disabled={isPending || disabled}
       className={cn(
-        "cursor-pointer rounded-md font-bold transition-all flex items-center justify-center drop-shadow-[0_0_2px_#ff3c78]",
+        "cursor-pointer rounded-md font-bold transition-all flex items-center justify-center",
+        variant !== "ghost" &&
+          variant !== "outline" &&
+          "drop-shadow-[0_0_2px_#ff3c78]",
         sizeClasses[size],
         variantClasses[variant],
         className
       )}
     >
-      {isPending && <Loader2 className="animate-spin mr-2 h-4 w-4 text-white" />}
+      {isPending && (
+        <Loader2 className="animate-spin mr-2 h-4 w-4 text-white" />
+      )}
       {isPending ? loadingText : children}
     </Button>
   );

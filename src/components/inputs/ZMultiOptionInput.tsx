@@ -131,12 +131,11 @@ export const ZMultiOptionInput = React.forwardRef(
           </label>
         )}
 
-        {/* Tags */}
         <div className="flex flex-wrap gap-1">
           {(value || []).map((item) => (
             <span
               key={item.value.toString()}
-              className="flex gap-1 px-2 py-0.5 bg-gray-700 rounded text-gray-200 text-xs"
+              className="flex items-center gap-1 px-2 py-0.5 bg-gray-700 rounded text-gray-200 text-xs"
             >
               {item.label}
               <X
@@ -147,7 +146,6 @@ export const ZMultiOptionInput = React.forwardRef(
           ))}
         </div>
 
-        {/* Popover */}
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <Button

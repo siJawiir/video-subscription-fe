@@ -115,6 +115,7 @@ export default function VideoTable() {
               value: tag.video_tag_id,
               label: tag.name,
             })),
+            price: Number(row.price),
           });
         }}
         onDelete={(row) => {
