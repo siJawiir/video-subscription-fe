@@ -35,10 +35,10 @@ export function handleMutationSuccess<TResponse, TVariables>(
     handleCallback,
   } = options ?? {};
 
-  const action = isUpdate ? "diupdate" : "dibuat";
+  const action = isUpdate ? "updated" : "created";
 
   if (response.success) {
-    toast.success(successMessage ?? `Data berhasil ${action}`, {
+    toast.success(successMessage ?? `Data successfully ${action}`, {
       description: getResponseMessage?.(variables) ?? response.message ?? "",
     });
 
@@ -49,14 +49,15 @@ export function handleMutationSuccess<TResponse, TVariables>(
     resetForm?.();
     handleCallback?.(response.data ?? variables);
   } else {
-    toast.error(errorMessage ?? "Gagal menyimpan data", {
-      description: response.error ?? "Terjadi kesalahan yang tidak diketahui.",
+    toast.error(errorMessage ?? "Failed to send data", {
+      description:
+        response.error ?? "Something went wrong, please try again later.",
     });
   }
 }
 
 export function handleMutationError(error: Error) {
-  toast.error("Gagal mengirim data", {
-    description: error.message ?? "Terjadi kesalahan server.",
+  toast.error("Failed to send data", {
+    description: error.message ?? "Server error, please try again later.",
   });
 }

@@ -1,20 +1,43 @@
 "use client";
 
 import { Show, ZSkeleton } from "@/components";
+import { useDatatable } from "@/hooks/useDatatable";
+import { usePaginatedQuery } from "@/hooks/usePaginatedQuery";
 import { cn } from "@/lib/utils";
 import { dateFormat } from "@/utils";
 import { formatNumber } from "@/utils/number";
 import { BadgeDollarSign, Ticket } from "lucide-react";
-import { useOrders } from "../hooks/useCart";
-import { ORDER_STATUSES } from "../utils/constans";
+import { OrderParamsType, OrdersResponseType } from "order-types";
+import { INITIAL_ORDER_PARAMS, ORDER_STATUSES } from "../utils/constans";
+import { getOrders } from "../utils/services";
 import OrdersItemCard from "./OrdertemCard";
 
 export default function OrdersList() {
-  const query = useOrders({
-    enabled: true,
+  const datatable = useDatatable({
+    initialPage: INITIAL_ORDER_PARAMS.current_page,
+    initialPageSize: INITIAL_ORDER_PARAMS.per_page,
+    initialFilters: INITIAL_ORDER_PARAMS,
   });
 
-  const orders = query.data;
+  const { data, isPending } = usePaginatedQuery<
+    OrdersResponseType,
+    OrderParamsType
+  >({
+    queryKey: [
+      "video-video-list",
+      datatable.filters,
+      datatable.page,
+      datatable.sorting,
+    ],
+    fetchFn: getOrders,
+    params: {
+      ...datatable.filters,
+      current_page: datatable.page,
+      per_page: datatable.pageSize,
+    },
+  });
+
+  const orders = data?.data?.data || [];
 
   const getStatusStyle = (status: number) =>
     cn(
@@ -42,11 +65,11 @@ export default function OrdersList() {
 
   return (
     <>
-      <Show.When condition={query.isPending}>
+      <Show.When condition={isPending}>
         <ZSkeleton variant="card" orientation="vertical" rows={3} />
       </Show.When>
 
-      <Show.When condition={!query.isPending && !orders}>
+      <Show.When condition={!isPending && !orders}>
         <div className="w-full">
           <p className="text-sm text-muted-foreground text-center">
             No Orders Found
@@ -54,7 +77,7 @@ export default function OrdersList() {
         </div>
       </Show.When>
 
-      <Show.When condition={!query.isPending && !!orders}>
+      <Show.When condition={!isPending && !!orders}>
         <div className="flex flex-col gap-6 p-4">
           {(orders ?? []).map((order) => (
             <div

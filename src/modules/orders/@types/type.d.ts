@@ -17,4 +17,8 @@ declare module "order-types" {
     price: number;
     video?: VideoResponseType;
   }
+
+  export type OrderParamsType = PaginationParams<{
+    search?: string;
+  }>;
 }

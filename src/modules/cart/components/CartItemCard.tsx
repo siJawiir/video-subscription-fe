@@ -12,8 +12,13 @@ import { CartFormType, CartItemResponseType } from "cart-types";
 import Link from "next/link";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { useMutationCart } from "../hooks/useMutationCart";
-import { Trash2 } from "lucide-react";
+import { Folder, Tag, Trash2 } from "lucide-react";
 import { useDialog } from "@/hooks/useDialog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface CartItemCardProps {
   cart: CartItemResponseType;
@@ -112,23 +117,63 @@ export default function CartItemCard({
         </div>
 
         <div className="flex flex-wrap gap-2 mb-3">
-          {cart.video?.categories?.map((cat) => (
+          {cart.video?.categories?.slice(0, 3).map((cat) => (
             <span
               key={cat.video_category_id}
-              className="bg-zinc-700 text-zinc-200 text-xs px-2 py-1 rounded-full"
+              className="flex items-center space-x-1 bg-indigo-700 text-indigo-100 text-xs px-2 py-1 rounded-full"
             >
-              {cat.name}
+              <Folder size={14} />
+              <p className="truncate max-w-[100px]">{cat.name}</p>
             </span>
           ))}
+          {cart.video?.categories && cart.video.categories.length > 3 && (
+            <Tooltip>
+              <TooltipTrigger>
+                <span className="flex items-center space-x-1 bg-indigo-900 text-indigo-100 text-xs px-2 py-1 rounded-full cursor-pointer">
+                  +{cart.video.categories.length - 3} more
+                </span>
+              </TooltipTrigger>
+              <TooltipContent className="flex flex-col gap-1 p-2">
+                {cart.video.categories.slice(3).map((cat) => (
+                  <span
+                    key={cat.video_category_id}
+                    className="flex items-center space-x-1 text-indigo-900 text-xs"
+                  >
+                    <p>{cat.name}</p>
+                  </span>
+                ))}
+              </TooltipContent>
+            </Tooltip>
+          )}
 
-          {cart.video?.tags?.map((tag) => (
+          {cart.video?.tags?.slice(0, 3).map((tag) => (
             <span
               key={tag.video_tag_id}
-              className="bg-indigo-600 text-white text-xs px-2 py-1 rounded-full"
+              className="flex items-center space-x-1 bg-zinc-600 text-white text-xs px-2 py-1 rounded-full"
             >
-              {tag.name}
+              <Tag size={14} />
+              <p className="truncate max-w-[100px]">{tag.name}</p>
             </span>
           ))}
+          {cart.video?.tags && cart.video.tags.length > 3 && (
+            <Tooltip>
+              <TooltipTrigger>
+                <span className="flex items-center space-x-1 bg-zinc-600 text-white text-xs px-2 py-1 rounded-full cursor-pointer">
+                  +{cart.video.tags.length - 3} more
+                </span>
+              </TooltipTrigger>
+              <TooltipContent className="flex flex-col gap-1 p-2">
+                {cart.video.tags.slice(3).map((tag) => (
+                  <span
+                    key={tag.video_tag_id}
+                    className="flex items-center space-x-1 text-zinc-600 text-xs"
+                  >
+                    <p>{tag.name}</p>
+                  </span>
+                ))}
+              </TooltipContent>
+            </Tooltip>
+          )}
         </div>
 
         <div className="mt-auto">

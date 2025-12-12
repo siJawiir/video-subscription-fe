@@ -1,8 +1,9 @@
-import { apiGetService } from "@/lib/axios";
-import { OrdersResponseType } from "order-types";
-export async function getOrders() {
-  return await apiGetService<OrdersResponseType[]>({
-    url: "/my-orders",
-    params: {},
+import { apiGetListService } from "@/lib/axios";
+import { OrderParamsType, OrdersResponseType } from "order-types";
+
+export async function getOrders(params: OrderParamsType) {
+  return await apiGetListService<OrdersResponseType, OrderParamsType>({
+    url: "my-orders",
+    params,
   });
 }
