@@ -82,22 +82,18 @@ export default function CartItemCard({
         />
       </div>
 
-      <Link
-        href={`/videos/${cart.video?.video_id}`}
-        className="relative md:w-48 w-full h-60 md:h-auto shrink-0"
-      >
-        <ZImage
-          src={cart.video?.thumbnail_url}
-          alt={cart.video?.title || ""}
-          width={400}
-          height={250}
-          className="w-full h-full object-cover"
-        />
+      <ZImage
+        src={cart.video?.thumbnail_url}
+        alt={cart.video?.title || ""}
+        width={400}
+        height={250}
+        className="w-full h-full object-cover"
+        onClick={() => handleSelect(cart)}
+      />
 
-        <span className="absolute top-2 right-2 bg-indigo-600 text-white text-xs font-bold px-2 py-1 rounded-lg">
-          {Math.floor(durationSeconds / 60)}m
-        </span>
-      </Link>
+      <span className="absolute top-2 right-2 bg-indigo-600 text-white text-xs font-bold px-2 py-1 rounded-lg">
+        {Math.floor(durationSeconds / 60)}m
+      </span>
 
       <div className="flex flex-col justify-between p-4 md:p-6 flex-1">
         <div className="mb-3">
