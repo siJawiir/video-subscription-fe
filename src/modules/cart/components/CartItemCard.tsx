@@ -81,15 +81,18 @@ export default function CartItemCard({
           isPending={mDelete.isPending}
         />
       </div>
-
-      <ZImage
-        src={cart.video?.thumbnail_url}
-        alt={cart.video?.title || ""}
-        width={400}
-        height={250}
-        className="w-full h-full object-cover"
+      <div
+        className="relative md:w-48 w-full h-60 md:h-auto shrink-0"
         onClick={() => handleSelect(cart)}
-      />
+      >
+        <ZImage
+          src={cart.video?.thumbnail_url}
+          alt={cart.video?.title || ""}
+          width={400}
+          height={250}
+          className="w-full h-full object-cover"
+        />
+      </div>
 
       <span className="absolute top-2 right-2 bg-indigo-600 text-white text-xs font-bold px-2 py-1 rounded-lg">
         {Math.floor(durationSeconds / 60)}m
