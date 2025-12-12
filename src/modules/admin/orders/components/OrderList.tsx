@@ -1,14 +1,21 @@
 "use client";
 
-import { Show, ZSkeleton } from "@/components";
+import { Show, WarningAlert, ZButton, ZSkeleton } from "@/components";
 import { useDatatable } from "@/hooks/useDatatable";
+import { useDialog } from "@/hooks/useDialog";
 import { usePaginatedQuery } from "@/hooks/usePaginatedQuery";
 import { cn } from "@/lib/utils";
+import {
+  INITIAL_ORDER_PARAMS,
+  ORDER_STATUSES,
+} from "@/modules/orders/utils/constans";
 import { dateFormat } from "@/utils";
 import { formatNumber } from "@/utils/number";
+import { OrderFormType } from "admin-order-types";
 import { BadgeDollarSign, Ticket } from "lucide-react";
 import { OrderParamsType, OrdersResponseType } from "order-types";
-import { INITIAL_ORDER_PARAMS, ORDER_STATUSES } from "../utils/constans";
+import { useFormContext, useWatch } from "react-hook-form";
+import { useMutationOrder } from "../hooks/useMutationOrder";
 import { getOrders } from "../utils/services";
 import OrdersItemCard from "./OrdertemCard";
 
@@ -19,12 +26,23 @@ export default function OrdersList() {
     initialFilters: INITIAL_ORDER_PARAMS,
   });
 
+  const { handleOpen, handleClose, open } = useDialog();
+
+  const { control, setValue, getValues } = useFormContext<OrderFormType>();
+
+  const type = useWatch({
+    control,
+    name: "type",
+  });
+
+  const { onSubmit, isPending: isMutationPending } = useMutationOrder();
+
   const { data, isPending } = usePaginatedQuery<
     OrdersResponseType,
     OrderParamsType
   >({
     queryKey: [
-      "my-order-list",
+      "order-list",
       datatable.filters,
       datatable.page,
       datatable.sorting,
@@ -109,14 +127,45 @@ export default function OrdersList() {
                 </span>
               </div>
 
-              <div className="text-sm text-zinc-300 space-y-3 mb-4">
-                <div className="flex items-center gap-2">
-                  <BadgeDollarSign className="w-5 h-5 text-green-300" />
-                  <span className="text-zinc-300">Total Amount:</span>
-                  <span className="text-indigo-300 font-semibold">
-                    IDR {formatNumber(order.total_amount)}
-                  </span>
+              <div className="flex items-center justify-between my-2">
+                <div className="text-sm text-zinc-300 space-y-3 mb-4">
+                  <div className="flex items-center gap-2">
+                    <BadgeDollarSign className="w-5 h-5 text-green-300" />
+                    <span className="text-zinc-300">Total Amount:</span>
+                    <span className="text-indigo-300 font-semibold">
+                      IDR {formatNumber(order.total_amount ?? 0)}
+                    </span>
+                  </div>
                 </div>
+                <Show.When condition={order.status === ORDER_STATUSES.PENDING}>
+                  <div className="flex space-x-4">
+                    <ZButton
+                      type="button"
+                      variant="outline"
+                      onClick={() => {
+                        setValue("order_id", order.order_id);
+                        setValue("type", "rejected");
+                        handleOpen();
+                      }}
+                      disabled={isMutationPending}
+                      isPending={isMutationPending && type === "rejected"}
+                    >
+                      Reject
+                    </ZButton>
+                    <ZButton
+                      type="button"
+                      onClick={() => {
+                        setValue("order_id", order.order_id);
+                        setValue("type", "approved");
+                        handleOpen();
+                      }}
+                      disabled={isMutationPending}
+                      isPending={isMutationPending && type === "approved"}
+                    >
+                      Approve
+                    </ZButton>
+                  </div>
+                </Show.When>
               </div>
 
               <div className="w-full h-px bg-zinc-800 mb-4" />
@@ -129,6 +178,20 @@ export default function OrdersList() {
           ))}
         </div>
       </Show.When>
+      <WarningAlert
+        open={open}
+        title={`${type === "approved" ? "Approve" : "Reject"} Order`}
+        agreeLabel={`${type === "approved" ? "Approve" : "Reject"}`}
+        cancelLabel="Cancel"
+        subtitle={`Are you sure you want to ${
+          type === "approved" ? "approve" : "reject"
+        } this order?`}
+        onAgree={() => {
+          onSubmit(getValues());
+          handleClose();
+        }}
+        onCancel={handleClose}
+      />
     </>
   );
 }

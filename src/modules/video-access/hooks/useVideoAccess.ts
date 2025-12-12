@@ -22,8 +22,8 @@ export function useVideoAccess({
       const data = res.data;
       if (!res.success || !data) return null;
 
-      onSuccess?.(data);
-      return data;
+      onSuccess?.(data.data);
+      return data.data;
     },
     enabled,
     refetchOnWindowFocus: false,

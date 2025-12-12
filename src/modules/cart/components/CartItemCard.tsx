@@ -19,6 +19,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { formatNumber } from "@/utils/number";
+import { useState } from "react";
 
 interface CartItemCardProps {
   cart: CartItemResponseType;
@@ -39,9 +41,10 @@ export default function CartItemCard({
     },
   });
 
+  const [duration, setDuration] = useState(cart.duration_seconds);
+
   const { control, reset } = methods;
   const videoID = useWatch({ control, name: "video_id" });
-  const durationSeconds = useWatch({ control, name: "duration_seconds" });
 
   const dDelete = useDialog();
 
@@ -51,7 +54,7 @@ export default function CartItemCard({
     reset();
     onSubmit({
       cart_item_id: cart.cart_item_id,
-      duration_seconds: data || durationSeconds,
+      duration_seconds: data ?? duration,
       video_id: videoID,
     });
   };
@@ -95,7 +98,7 @@ export default function CartItemCard({
       </div>
 
       <span className="absolute top-2 right-2 bg-indigo-600 text-white text-xs font-bold px-2 py-1 rounded-lg">
-        {Math.floor(durationSeconds / 60)}m
+        {duration / 60}mins
       </span>
 
       <div className="flex flex-col justify-between p-4 md:p-6 flex-1">
@@ -175,7 +178,15 @@ export default function CartItemCard({
           )}
         </div>
 
-        <div className="mt-auto">
+        <div className="mt-auto space-y-2">
+          <div className="flex items-end space-x-2">
+            <div className="text-3xl font-semibold mt-2">
+              IDR {formatNumber(Number(cart?.video?.price) * 3600)}
+            </div>
+            <div>
+              <p className="text-sm text-gray-400">per hour</p>
+            </div>
+          </div>
           <Controller
             name="duration_seconds"
             control={control}
@@ -184,7 +195,10 @@ export default function CartItemCard({
                 value={field.value}
                 onChange={field.onChange}
                 onBlur={handleUpdate}
-                onPresetSelect={(data) => handleUpdate(data)}
+                onPresetSelect={(data) => {
+                  handleUpdate(data);
+                  setDuration(data);
+                }}
               />
             )}
           />
