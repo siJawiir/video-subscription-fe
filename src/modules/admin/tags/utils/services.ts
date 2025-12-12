@@ -8,8 +8,8 @@ import {
   VideoTagFormType,
   VideoTagParamsType,
   VideoTagUpdateFormType,
-} from "admin-admin-tag-type";
-import { VideoTagResponseType } from "admin-tag-type";
+  VideoTagResponseType,
+} from "admin-tag-type";
 
 export async function getTag(params: VideoTagParamsType) {
   return await apiGetListService<VideoTagResponseType, VideoTagParamsType>({

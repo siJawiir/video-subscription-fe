@@ -3,7 +3,7 @@
 import { ZFormButton } from "@/components/buttons";
 import { ZTextareaInput, ZTextInput } from "@/components/inputs";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { VideoTagFormType, VideoTagUpdateFormType } from "admin-admin-tag-type";
+import { VideoTagFormType, VideoTagUpdateFormType } from "admin-tag-type";
 import { SubmitHandler, useFormContext, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 import { initialTag } from "../utils/constants";

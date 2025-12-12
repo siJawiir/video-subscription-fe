@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -14,22 +15,21 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { apiGetService } from "@/lib/axios";
+import { Check, ChevronsUpDown, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { MASTER_RESOURCES } from "@/utils";
+import { apiGetService } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
-import { Check, ChevronsUpDown } from "lucide-react";
-import * as React from "react";
 import { ResourceType } from "resource-types";
+import { MASTER_RESOURCES } from "@/utils";
 
-export interface ZOptionInputProps<TExtra extends object = object> {
+export interface ZMultiOptionInputProps<TExtra extends object = object> {
   label?: string;
   error?: string;
   options?: ResourceType[];
   placeholder?: string;
   disabled?: boolean;
-  value?: string | number | null;
-  onValueChange?: (value: string) => void;
+  value?: ResourceType[] | null;
+  onValueChange?: (value: ResourceType[]) => void;
   className?: string;
   required?: boolean;
   async?: boolean;
@@ -39,15 +39,15 @@ export interface ZOptionInputProps<TExtra extends object = object> {
   enableFetch?: boolean;
 }
 
-export const ZOptionInput = React.forwardRef(
+export const ZMultiOptionInput = React.forwardRef(
   <TExtra extends object = object>(
     {
       label,
       error,
       options = [],
-      placeholder = "Select option...",
+      placeholder = "Select options...",
       className = "",
-      value,
+      value = [],
       onValueChange,
       disabled,
       required,
@@ -56,7 +56,7 @@ export const ZOptionInput = React.forwardRef(
       filter,
       extraFilters,
       enableFetch = true,
-    }: ZOptionInputProps<TExtra>,
+    }: ZMultiOptionInputProps<TExtra>,
     ref: React.Ref<HTMLButtonElement>
   ) => {
     const [open, setOpen] = React.useState(false);
@@ -78,7 +78,7 @@ export const ZOptionInput = React.forwardRef(
         if (!resource) return [];
         const res = await apiGetService<{
           success: boolean;
-          data: { data: ResourceType[] };
+          data: ResourceType[];
         }>({
           url: `/${resource}-resources`,
           params: {
@@ -87,8 +87,8 @@ export const ZOptionInput = React.forwardRef(
             ...(extraFilters ?? {}),
           },
         });
-        if (!res.success || !Array.isArray(res.data?.data)) return [];
-        return res.data.data;
+        if (!res.success || !Array.isArray(res.data)) return [];
+        return res.data;
       },
       enabled: isAsync && !!resource && enableFetch,
     });
@@ -106,16 +106,23 @@ export const ZOptionInput = React.forwardRef(
       return options;
     }, [isAsync, fetchedOptions, options, search]);
 
-    const selectedOption = renderedOptions.find(
-      (opt) => opt.value?.toString() === value?.toString()
-    );
+    const toggleValue = (item: ResourceType) => {
+      let newValues: ResourceType[];
+      const currentValue = value || [];
+      if (currentValue.some((v) => v.value === item.value)) {
+        newValues = currentValue.filter((v) => v.value !== item.value);
+      } else {
+        newValues = [...currentValue, item];
+      }
+      onValueChange?.(newValues);
+    };
 
     return (
       <div className="flex flex-col w-full">
         {label && (
           <label
             className={cn(
-              "mb-1 text-xs font-semibold flex items-center gap-1",
+              "mb-1 text-xs font-semibold tracking-widest flex items-center gap-1",
               error ? "text-red-600" : "text-gray-300"
             )}
           >
@@ -124,6 +131,23 @@ export const ZOptionInput = React.forwardRef(
           </label>
         )}
 
+        {/* Tags */}
+        <div className="flex flex-wrap gap-1">
+          {(value || []).map((item) => (
+            <span
+              key={item.value.toString()}
+              className="flex gap-1 px-2 py-0.5 bg-gray-700 rounded text-gray-200 text-xs"
+            >
+              {item.label}
+              <X
+                className="w-3 h-3 cursor-pointer"
+                onClick={() => toggleValue(item)}
+              />
+            </span>
+          ))}
+        </div>
+
+        {/* Popover */}
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <Button
@@ -133,31 +157,21 @@ export const ZOptionInput = React.forwardRef(
               disabled={disabled}
               aria-expanded={open}
               className={cn(
-                "w-full justify-between text-gray-200 border border-gray-600 rounded-lg",
+                "w-full justify-between text-gray-200 border border-gray-600 rounded-lg mt-1",
                 error && "border-red-600",
                 className
               )}
               onClick={() => setOpen(!open)}
             >
-              {selectedOption ? (
-                <span className="font-medium text-gray-200">
-                  {selectedOption.label}
-                </span>
-              ) : isLoading ? (
-                "Loading..."
-              ) : isError ? (
-                "Failed to load"
-              ) : (
-                <span className="text-gray-400">{placeholder}</span>
-              )}
+              <span>{placeholder}</span>
               <ChevronsUpDown className="opacity-70 h-4 w-4 ml-2" />
             </Button>
           </PopoverTrigger>
 
           <PopoverContent
             align="start"
-            className="p-0 min-w-(--radix-popover-trigger-width) bg-black/95 border border-gray-600 rounded-lg shadow-sm"
             side="bottom"
+            className="p-0 min-w-(--radix-popover-trigger-width) bg-black/95 border border-gray-600 rounded-lg shadow-sm"
           >
             <Command
               shouldFilter={false}
@@ -188,28 +202,18 @@ export const ZOptionInput = React.forwardRef(
                       <CommandItem
                         key={opt.value?.toString()}
                         value={opt.value?.toString()}
-                        onSelect={(currValue) => {
-                          onValueChange?.(currValue);
-                          setOpen(false);
-                        }}
-                        className="cursor-pointer text-gray-200 hover:bg-gray-700"
+                        onSelect={() => toggleValue(opt)}
+                        className="cursor-pointer text-gray-200 hover:bg-gray-700 flex justify-between"
                       >
+                        <span>{opt.label}</span>
                         <Check
                           className={cn(
-                            "mr-2 h-4 w-4",
-                            value?.toString() === opt.value?.toString()
+                            "h-4 w-4",
+                            (value ?? []).some((v) => v.value === opt.value)
                               ? "opacity-100 text-gray-300"
                               : "opacity-0"
                           )}
                         />
-                        <div className="flex flex-col">
-                          <span className="font-medium">{opt.label}</span>
-                          {opt.description && (
-                            <span className="text-xs text-gray-400">
-                              {opt.description}
-                            </span>
-                          )}
-                        </div>
                       </CommandItem>
                     ))}
                   </CommandGroup>
@@ -225,4 +229,4 @@ export const ZOptionInput = React.forwardRef(
   }
 );
 
-ZOptionInput.displayName = "ZOptionInput";
+ZMultiOptionInput.displayName = "ZMultiOptionInput";

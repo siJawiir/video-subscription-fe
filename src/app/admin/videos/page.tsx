@@ -1,4 +1,9 @@
+import Videos from "@/modules/admin/videos/Videos";
 
 export default function VideoPage() {
-  return <div>page</div>;
+  return (
+    <>
+      <Videos />
+    </>
+  );
 }

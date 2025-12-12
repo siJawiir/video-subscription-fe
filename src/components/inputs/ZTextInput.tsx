@@ -31,7 +31,6 @@ export const ZTextInput = React.forwardRef<HTMLInputElement, ZTextInputProps>(
 
     return (
       <div className="flex flex-col w-full">
-        {/* Label */}
         {label && (
           <label
             className={cn(
